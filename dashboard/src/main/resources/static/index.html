@@ -1,69 +1,55 @@
-<!DOCTYPE html>
+'<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Finance Data Processing and Access Control Backend</title>
+<title>FinanceOS — Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
 
-<!-- ── LOGIN PAGE ─────────────────────────────────────────────────────────── -->
 <div id="loginPage">
   <div class="login-wrap">
     <div class="login-bg"></div>
     <div class="login-card">
       <div class="login-logo">FinanceOS</div>
       <div class="login-sub">Finance Dashboard System</div>
-
       <div class="login-hint">
         <strong>admin</strong> / admin123 &nbsp;·&nbsp;
         <strong>analyst</strong> / analyst123 &nbsp;·&nbsp;
         <strong>viewer</strong> / viewer123
       </div>
-
       <div class="alert alert-error" id="loginError"></div>
-
       <div class="form-group">
         <label class="form-label">API Base URL</label>
         <input class="form-input" id="apiUrlInput" type="text"
-               value="http://localhost:8080"
                placeholder="http://localhost:8080"/>
       </div>
       <div class="form-group">
         <label class="form-label">Username</label>
-        <input class="form-input" id="loginUser" type="text"
-               placeholder="admin" value="admin"/>
+        <input class="form-input" id="loginUser" type="text" placeholder="admin" value="admin"/>
       </div>
       <div class="form-group">
         <label class="form-label">Password</label>
-        <input class="form-input" id="loginPass" type="password"
-               placeholder="••••••••" value="admin123"/>
+        <input class="form-input" id="loginPass" type="password" placeholder="••••••••" value="admin123"/>
       </div>
-      <button class="btn btn-primary btn-full" id="loginBtn" onclick="doLogin()">
-        Sign In
-      </button>
+      <button class="btn btn-primary btn-full" id="loginBtn" onclick="doLogin()">Sign In</button>
     </div>
   </div>
 </div>
 
-<!-- ── MAIN APP ───────────────────────────────────────────────────────────── -->
 <div id="appPage" style="display:none">
   <div class="app">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
       <div class="logo">
         <div class="logo-mark">FinanceOS</div>
         <div class="logo-sub">Dashboard v1.0</div>
       </div>
-
       <nav class="nav">
         <button class="nav-item active" onclick="showPage('dashboard', this)">
-          <svg class="nav-icon" viewBox="0 0 16 16" fill="none"
-               stroke="currentColor" stroke-width="1.5">
+          <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="1" y="1" width="6" height="6" rx="1.5"/>
             <rect x="9" y="1" width="6" height="6" rx="1.5"/>
             <rect x="1" y="9" width="6" height="6" rx="1.5"/>
@@ -71,19 +57,15 @@
           </svg>
           Dashboard
         </button>
-
         <button class="nav-item" onclick="showPage('transactions', this)">
-          <svg class="nav-icon" viewBox="0 0 16 16" fill="none"
-               stroke="currentColor" stroke-width="1.5">
+          <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M1 4h14M1 8h9M1 12h6"/>
             <path d="M12 10l2 2 2-2M14 8v4"/>
           </svg>
           Transactions
         </button>
-
         <button class="nav-item" id="navUsers" onclick="showPage('users', this)">
-          <svg class="nav-icon" viewBox="0 0 16 16" fill="none"
-               stroke="currentColor" stroke-width="1.5">
+          <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="6" cy="5" r="3"/>
             <path d="M1 14c0-3 2-5 5-5s5 2 5 5"/>
             <path d="M11 2a3 3 0 010 6M15 14c0-2-1-4-4-4"/>
@@ -91,7 +73,6 @@
           Users
         </button>
       </nav>
-
       <div class="sidebar-bottom">
         <div class="user-badge">
           <div class="user-avatar" id="sidebarAvatar">A</div>
@@ -100,8 +81,7 @@
             <div class="user-role" id="sidebarRole">ADMIN</div>
           </div>
           <button class="logout-btn" onclick="doLogout()" title="Logout">
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-                 stroke="currentColor" stroke-width="1.5">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6"/>
             </svg>
           </button>
@@ -109,10 +89,7 @@
       </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <div class="main">
-
-      <!-- API Config Bar -->
       <div class="api-config">
         <span>API:</span>
         <input class="api-url-input" id="apiUrlDisplay" readonly/>
@@ -121,17 +98,12 @@
           <span id="apiStatusText">checking...</span>
         </div>
       </div>
-
-      <!-- Top Bar -->
       <div class="topbar">
         <div class="topbar-title" id="topbarTitle">Dashboard</div>
         <div class="topbar-actions" id="topbarActions"></div>
       </div>
-
-      <!-- Pages -->
       <div class="content">
 
-        <!-- DASHBOARD PAGE -->
         <div class="page active" id="page-dashboard">
           <div class="stats-grid">
             <div class="stat-card income">
@@ -150,23 +122,17 @@
               <div class="stat-sub">Income − Expense</div>
             </div>
           </div>
-
           <div class="grid-2">
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">Category Totals</div>
-              </div>
+              <div class="card-header"><div class="card-title">Category Totals</div></div>
               <div class="card-body">
                 <div class="category-list" id="categoryList">
                   <div class="empty-state"><div class="spinner"></div></div>
                 </div>
               </div>
             </div>
-
             <div class="card">
-              <div class="card-header">
-                <div class="card-title">Recent Transactions</div>
-              </div>
+              <div class="card-header"><div class="card-title">Recent Transactions</div></div>
               <div class="card-body" style="padding:12px 20px">
                 <div class="recent-list" id="recentList">
                   <div class="empty-state"><div class="spinner"></div></div>
@@ -174,8 +140,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Monthly Trend Chart -->
           <div class="card" style="margin-top:20px" id="trendCard">
             <div class="card-header">
               <div class="card-title">Monthly Trends</div>
@@ -185,12 +149,10 @@
             <div class="card-body">
               <div style="display:flex;gap:12px;margin-bottom:10px;">
                 <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px">
-                  <span style="width:8px;height:8px;border-radius:2px;background:var(--income);display:inline-block"></span>
-                  Income
+                  <span style="width:8px;height:8px;border-radius:2px;background:var(--income);display:inline-block"></span>Income
                 </span>
                 <span style="font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px">
-                  <span style="width:8px;height:8px;border-radius:2px;background:var(--expense);display:inline-block"></span>
-                  Expense
+                  <span style="width:8px;height:8px;border-radius:2px;background:var(--expense);display:inline-block"></span>Expense
                 </span>
               </div>
               <div class="chart-wrap" id="trendChart">
@@ -200,7 +162,6 @@
           </div>
         </div>
 
-        <!-- TRANSACTIONS PAGE -->
         <div class="page" id="page-transactions">
           <div class="filters">
             <select class="filter-input" id="filterType" onchange="loadTransactions()">
@@ -210,69 +171,50 @@
             </select>
             <input class="filter-input" id="filterCategory" type="text"
                    placeholder="Category..." onchange="loadTransactions()"/>
-            <input class="filter-input" id="filterFrom" type="date"
-                   onchange="loadTransactions()"/>
+            <input class="filter-input" id="filterFrom" type="date" onchange="loadTransactions()"/>
             <span style="color:var(--text3);font-size:12px">to</span>
-            <input class="filter-input" id="filterTo" type="date"
-                   onchange="loadTransactions()"/>
+            <input class="filter-input" id="filterTo" type="date" onchange="loadTransactions()"/>
             <button class="btn btn-ghost btn-sm" onclick="clearFilters()">Clear</button>
           </div>
-
           <div class="card">
             <div class="card-header">
               <div class="card-title">All Transactions</div>
-              <span id="txnCount"
-                    style="font-size:11px;color:var(--text3);font-family:var(--mono)">
-              </span>
+              <span id="txnCount" style="font-size:11px;color:var(--text3);font-family:var(--mono)"></span>
             </div>
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr>
-                    <th>ID</th><th>Date</th><th>Category</th>
-                    <th>Type</th><th>Amount</th><th>Notes</th><th>Actions</th>
-                  </tr>
+                  <tr><th>ID</th><th>Date</th><th>Category</th><th>Type</th><th>Amount</th><th>Notes</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="txnBody">
-                  <tr><td colspan="7">
-                    <div class="empty-state"><div class="spinner"></div></div>
-                  </td></tr>
+                  <tr><td colspan="7"><div class="empty-state"><div class="spinner"></div></div></td></tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- USERS PAGE -->
         <div class="page" id="page-users">
           <div class="card">
-            <div class="card-header">
-              <div class="card-title">User Management</div>
-            </div>
+            <div class="card-header"><div class="card-title">User Management</div></div>
             <div class="table-wrap">
               <table>
                 <thead>
-                  <tr>
-                    <th>ID</th><th>Username</th><th>Email</th>
-                    <th>Role</th><th>Status</th><th>Actions</th>
-                  </tr>
+                  <tr><th>ID</th><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th>Actions</th></tr>
                 </thead>
                 <tbody id="usersBody">
-                  <tr><td colspan="6">
-                    <div class="empty-state"><div class="spinner"></div></div>
-                  </td></tr>
+                  <tr><td colspan="6"><div class="empty-state"><div class="spinner"></div></div></td></tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-      </div><!-- /content -->
-    </div><!-- /main -->
-  </div><!-- /app -->
-</div><!-- /appPage -->
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- ── TRANSACTION MODAL ──────────────────────────────────────────────────── -->
 <div class="modal-overlay" id="txnModal">
   <div class="modal">
     <div class="modal-header">
@@ -285,8 +227,7 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Amount (₹)</label>
-          <input class="form-input" id="txnAmount" type="number"
-                 min="0.01" step="0.01" placeholder="0.00"/>
+          <input class="form-input" id="txnAmount" type="number" min="0.01" step="0.01" placeholder="0.00"/>
         </div>
         <div class="form-group">
           <label class="form-label">Type</label>
@@ -299,8 +240,7 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Category</label>
-          <input class="form-input" id="txnCategory" type="text"
-                 placeholder="Salary, Rent..."/>
+          <input class="form-input" id="txnCategory" type="text" placeholder="Salary, Rent..."/>
         </div>
         <div class="form-group">
           <label class="form-label">Date</label>
@@ -309,8 +249,7 @@
       </div>
       <div class="form-group">
         <label class="form-label">Notes (optional)</label>
-        <input class="form-input" id="txnNotes" type="text"
-               placeholder="Description..."/>
+        <input class="form-input" id="txnNotes" type="text" placeholder="Description..."/>
       </div>
     </div>
     <div class="modal-footer">
@@ -320,11 +259,7 @@
   </div>
 </div>
 
-<!-- ── TOAST ──────────────────────────────────────────────────────────────── -->
 <div class="toast" id="toast"></div>
-
-<!-- ── SCRIPTS ────────────────────────────────────────────────────────────── -->
 <script src="app.js"></script>
-
 </body>
 </html>
