@@ -41,9 +41,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/swagger-ui/**",
-                                "/api-docs/**", "/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+    "/api/auth/**",
+    "/swagger-ui/**",
+    "/swagger-ui.html",
+    "/v3/api-docs/**",
+    "/api-docs/**",
+    "/h2-console/**"
+).permitAll()
                 )
                 // Required for H2 console access
                 .headers(h -> h.frameOptions(f -> f.disable()))
