@@ -4,11 +4,13 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-
+import io.swagger.v3.oas.models.servers.Server;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -16,10 +18,6 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-
-                // Apply JWT globally
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-
                 .info(new Info()
                         .title("Finance Dashboard API")
                         .description("""
@@ -32,23 +30,27 @@ public class SwaggerConfig {
                                 | analyst  | analyst123 | ANALYST |
                                 | viewer   | viewer123  | VIEWER  |
 
-                                **Authentication flow:**
-                                1. POST /api/auth/login
-                                2. Copy token
-                                3. Click Authorize
-                                4. Use: Bearer {token}
+                                **How to authenticate:**
+                                1. Call POST /api/auth/login with credentials below
+                                2. Copy the `token` from the response
+                                3. Click the **Authorize** button above
+                                4. Enter: `Bearer {your_token}`
                                 """)
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Your Name")
-                                .email("your@email.com")))
-
+                                .name("Finance Dashboard")
+                                .email("admin@demo.com")))
+                // Add both localhost and any server
+                .servers(List.of(
+                        new Server().url("/").description("Current Server (auto-detected)"),
+                        new Server().url("http://localhost:8080").description("Local Development")
+                ))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
-                                        .description("JWT Authorization header using Bearer scheme")));
+                                        .description("Paste your JWT token here")));
     }
 }
