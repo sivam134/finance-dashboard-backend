@@ -7,10 +7,9 @@ import com.finance.dashboard.model.Role;
 import com.finance.dashboard.model.User;
 import com.finance.dashboard.repository.UserRepository;
 import com.finance.dashboard.security.JwtUtil;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,15 +23,12 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
 
-    // Register new user with default VIEWER role
     public void register(RegisterRequest request) {
-
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username already taken");
+            throw new RuntimeException("Username already taken");
         }
-
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new RuntimeException("Email already registered");
         }
 
         User user = User.builder()
@@ -46,21 +42,23 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    // Authenticate user and return JWT token
     public LoginResponse login(LoginRequest request) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new RuntimeException("Invalid username or password");
+        }
 
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!user.isActive()) {
-            throw new IllegalStateException("Account is deactivated");
+            throw new RuntimeException("Account is deactivated. Contact admin.");
         }
 
         String token = jwtUtil.generateToken(
@@ -68,10 +66,6 @@ public class AuthService {
                 user.getRole().name()
         );
 
-        return new LoginResponse(
-                token,
-                user.getRole().name(),
-                user.getUsername()
-        );
+        return new LoginResponse(token, user.getRole().name(), user.getUsername());
     }
 }
